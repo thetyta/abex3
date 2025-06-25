@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/postgres.js';
 
-const Usuario = sequelize.define("usuario", {
+const Usuario = sequelize.define("usuarios", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

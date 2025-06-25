@@ -15,7 +15,10 @@ const get = async (req, res) => {
       if (!endereco) {
         return res.status(404).json({ error: 'Endereço não encontrado' });
       }
-      return res.status(200).json(endereco);
+      return res.status(200).send({
+        message: 'Endereço encontrado',
+        data: endereco
+      });
     }
     
     const enderecos = await Endereco.findAll({
@@ -26,7 +29,10 @@ const get = async (req, res) => {
       }],
       order: [['created_at', 'DESC']]
     });
-    res.status(200).json(enderecos);
+    res.status(200).send({
+      message: 'Lista de endereços',
+      data: enderecos
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

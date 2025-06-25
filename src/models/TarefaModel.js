@@ -3,7 +3,7 @@ import { sequelize } from '../config/postgres.js';
 import Usuario from './UsuarioModel.js';
 import Projeto from './ProjetoModel.js';
 
-const Tarefa = sequelize.define("tarefa", {
+const Tarefa = sequelize.define("tarefas", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -59,7 +59,7 @@ const Tarefa = sequelize.define("tarefa", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'usuario',
+      model: 'usuarios',
       key: 'id'
     }
   },
@@ -67,7 +67,7 @@ const Tarefa = sequelize.define("tarefa", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'projeto',
+      model: 'projetos',
       key: 'id'
     }
   }

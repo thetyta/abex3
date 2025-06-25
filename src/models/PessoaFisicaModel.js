@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/postgres.js';
 import Usuario from './UsuarioModel.js';
 
-const PessoaFisica = sequelize.define("pessoa_fisica", {
+const PessoaFisica = sequelize.define("pessoas_fisicas", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -20,7 +20,7 @@ const PessoaFisica = sequelize.define("pessoa_fisica", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'usuario',
+      model: 'usuarios',
       key: 'id'
     }
   }
