@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/postgres.js';
-import Usuario from './UsuarioModel.js';
 
 const Projeto = sequelize.define("projetos", {
   id: {
@@ -20,11 +19,6 @@ const Projeto = sequelize.define("projetos", {
     type: DataTypes.TEXT,
     allowNull: true
   },
-  colaboradores: {
-    type: DataTypes.JSON,
-    allowNull: true,
-    defaultValue: []
-  },
   responsavel_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -38,12 +32,6 @@ const Projeto = sequelize.define("projetos", {
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at'
-});
-
-// Relacionamento
-Projeto.belongsTo(Usuario, {
-  foreignKey: 'responsavel_id',
-  as: 'responsavel'
 });
 
 export default Projeto;

@@ -1,41 +1,33 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/postgres.js';
 
-const Endereco = sequelize.define("enderecos", {
+const Anexo = sequelize.define("anexos", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  rua: {
+  nome_arquivo: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  bairro: {
+  url_arquivo: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  cep: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    references: {
-      model: 'localidades',
-      key: 'cep'
-    }
-  },
-  usuario_id: {
+  tarefa_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'usuarios',
+      model: 'tarefas',
       key: 'id'
     }
   }
 }, {
   freezeTableName: true,
   timestamps: true,
-  createdAt: 'created_at',
-  updatedAt: 'updated_at'
+  createdAt: 'uploaded_at',
+  updatedAt: false
 });
 
-export default Endereco;
+export default Anexo;

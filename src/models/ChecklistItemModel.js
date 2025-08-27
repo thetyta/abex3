@@ -1,41 +1,32 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/postgres.js';
 
-const Endereco = sequelize.define("enderecos", {
+const ChecklistItem = sequelize.define("checklist_itens", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  rua: {
+  descricao: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  bairro: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  cep: {
-    type: DataTypes.STRING,
+  concluido: {
+    type: DataTypes.BOOLEAN,
     allowNull: false,
-    references: {
-      model: 'localidades',
-      key: 'cep'
-    }
+    defaultValue: false
   },
-  usuario_id: {
+  tarefa_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'usuarios',
+      model: 'tarefas',
       key: 'id'
     }
   }
 }, {
   freezeTableName: true,
-  timestamps: true,
-  createdAt: 'created_at',
-  updatedAt: 'updated_at'
+  timestamps: false
 });
 
-export default Endereco;
+export default ChecklistItem;

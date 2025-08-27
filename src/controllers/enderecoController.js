@@ -1,38 +1,26 @@
-import { Endereco, Usuario } from '../models/index.js';
+import { Endereco, Usuario, Localidade } from '../models/index.js';
 
 const get = async (req, res) => {
   try {
     const { id } = req.params;
+    const includes = [
+      { model: Usuario, as: 'usuario', attributes: ['id', 'nome', 'email'] },
+      { model: Localidade, as: 'localidade' }
+    ];
     
     if (id) {
-      const endereco = await Endereco.findByPk(id, {
-        include: [{
-          model: Usuario,
-          as: 'usuario',
-          attributes: ['id', 'nome', 'email']
-        }]
-      });
+      const endereco = await Endereco.findByPk(id, { include: includes });
       if (!endereco) {
         return res.status(404).json({ error: 'Endereço não encontrado' });
       }
-      return res.status(200).send({
-        message: 'Endereço encontrado',
-        data: endereco
-      });
+      return res.status(200).json(endereco);
     }
     
     const enderecos = await Endereco.findAll({
-      include: [{
-        model: Usuario,
-        as: 'usuario',
-        attributes: ['id', 'nome', 'email']
-      }],
+      include: includes,
       order: [['created_at', 'DESC']]
     });
-    res.status(200).send({
-      message: 'Lista de endereços',
-      data: enderecos
-    });
+    res.status(200).json(enderecos);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -49,20 +37,15 @@ const create = async (body) => {
 
 const update = async (body, id) => {
   try {
-    const [updatedRows] = await Endereco.update(body, {
-      where: { id }
-    });
-    
+    const [updatedRows] = await Endereco.update(body, { where: { id } });
     if (updatedRows === 0) {
       throw new Error('Endereço não encontrado');
     }
-    
     const endereco = await Endereco.findByPk(id, {
-      include: [{
-        model: Usuario,
-        as: 'usuario',
-        attributes: ['id', 'nome', 'email']
-      }]
+      include: [
+        { model: Usuario, as: 'usuario', attributes: ['id', 'nome', 'email'] },
+        { model: Localidade, as: 'localidade' }
+      ]
     });
     return endereco;
   } catch (error) {
@@ -73,14 +56,10 @@ const update = async (body, id) => {
 const destroy = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedRows = await Endereco.destroy({
-      where: { id }
-    });
-    
+    const deletedRows = await Endereco.destroy({ where: { id } });
     if (deletedRows === 0) {
       return res.status(404).json({ error: 'Endereço não encontrado' });
     }
-    
     res.status(200).json({ message: 'Endereço deletado com sucesso' });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -90,13 +69,10 @@ const destroy = async (req, res) => {
 const persist = async (req, res) => {
   try {
     const { id } = req.params;
-    
     if (id) {
-      // Update
       const endereco = await update(req.body, id);
       res.status(200).json(endereco);
     } else {
-      // Create
       const endereco = await create(req.body);
       res.status(201).json(endereco);
     }

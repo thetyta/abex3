@@ -35,10 +35,4 @@ const PessoaJuridica = sequelize.define("pessoas_juridicas", {
   updatedAt: 'updated_at'
 });
 
-// Relacionamento
-PessoaJuridica.belongsTo(Usuario, {
-  foreignKey: 'usuario_id',
-  as: 'usuario'
-});
-
 export default PessoaJuridica;

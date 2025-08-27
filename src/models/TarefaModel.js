@@ -1,7 +1,5 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/postgres.js';
-import Usuario from './UsuarioModel.js';
-import Projeto from './ProjetoModel.js';
 
 const Tarefa = sequelize.define("tarefas", {
   id: {
@@ -33,11 +31,6 @@ const Tarefa = sequelize.define("tarefas", {
     type: DataTypes.DATEONLY,
     allowNull: true
   },
-  checklist: {
-    type: DataTypes.JSON,
-    allowNull: true,
-    defaultValue: []
-  },
   prioridade: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -49,11 +42,6 @@ const Tarefa = sequelize.define("tarefas", {
   descricao: {
     type: DataTypes.TEXT,
     allowNull: true
-  },
-  arquivos: {
-    type: DataTypes.JSON,
-    allowNull: true,
-    defaultValue: []
   },
   responsavel_id: {
     type: DataTypes.INTEGER,
@@ -76,17 +64,6 @@ const Tarefa = sequelize.define("tarefas", {
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at'
-});
-
-// Relacionamentos
-Tarefa.belongsTo(Usuario, {
-  foreignKey: 'responsavel_id',
-  as: 'responsavel'
-});
-
-Tarefa.belongsTo(Projeto, {
-  foreignKey: 'projeto_id',
-  as: 'projeto'
 });
 
 export default Tarefa;

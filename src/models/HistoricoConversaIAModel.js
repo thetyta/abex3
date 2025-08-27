@@ -1,33 +1,25 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/postgres.js';
 
-const Endereco = sequelize.define("enderecos", {
+const HistoricoConversaIA = sequelize.define("historico_conversas_ia", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  rua: {
-    type: DataTypes.STRING,
+  conteudo: {
+    type: DataTypes.TEXT,
     allowNull: false
   },
-  bairro: {
-    type: DataTypes.STRING,
+  remetente: {
+    type: DataTypes.ENUM('USUARIO', 'IA'),
     allowNull: false
   },
-  cep: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    references: {
-      model: 'localidades',
-      key: 'cep'
-    }
-  },
-  usuario_id: {
+  tarefa_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'usuarios',
+      model: 'tarefas',
       key: 'id'
     }
   }
@@ -38,4 +30,4 @@ const Endereco = sequelize.define("enderecos", {
   updatedAt: 'updated_at'
 });
 
-export default Endereco;
+export default HistoricoConversaIA;
