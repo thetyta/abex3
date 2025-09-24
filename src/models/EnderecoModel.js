@@ -9,10 +9,6 @@ const Endereco = sequelize.define("enderecos", {
   },
   rua: {
     type: DataTypes.STRING,
-    allowNull: false
-  },
-  rua: {
-    type: DataTypes.STRING,
     allowNull: true
   },
   bairro: {
