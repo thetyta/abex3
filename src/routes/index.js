@@ -9,6 +9,12 @@ import feedbackIARoutes from './FeedbackIARoute.js';
 import localidadeRoutes from './LocalidadeRoute.js';
 import checklistItemRoutes from './ChecklistItemRoute.js';
 import anexoRoutes from './AnexoRoute.js';
+import colunaRoutes from './colunaRoute.js';
+import etiquetaRoutes from './etiquetaRoute.js';
+import comentarioRoutes from './comentarioRoute.js';
+import quadroRoutes from './quadroRoute.js';
+import tarefaEtiquetaRoutes from './tarefaEtiquetaRoute.js';
+import projetoColaboradorRoutes from './projetoColaboradorRoute.js';
 
 function Routes(app) {
   usuarioRoutes(app);
@@ -22,6 +28,12 @@ function Routes(app) {
   anexoRoutes(app);
   historicoConversaIARoutes(app);
   feedbackIARoutes(app);
+  colunaRoutes(app);
+  etiquetaRoutes(app);
+  comentarioRoutes(app);
+  quadroRoutes(app);
+  tarefaEtiquetaRoutes(app);
+  projetoColaboradorRoutes(app);
 }
 
 export default Routes;

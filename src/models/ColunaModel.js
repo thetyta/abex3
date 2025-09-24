@@ -1,37 +1,27 @@
+// ColunaModel.js
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/postgres.js';
 
-const Endereco = sequelize.define("enderecos", {
+const Coluna = sequelize.define("colunas", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  rua: {
+  nome: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  rua: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  bairro: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  cep: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    references: {
-      model: 'localidades',
-      key: 'cep'
-    }
-  },
-  usuario_id: {
+  ordem: {
     type: DataTypes.INTEGER,
-    allowNull: true,
+    allowNull: false,
+    defaultValue: 0
+  },
+  quadro_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
     references: {
-      model: 'usuarios',
+      model: 'quadros',
       key: 'id'
     }
   }
@@ -42,4 +32,4 @@ const Endereco = sequelize.define("enderecos", {
   updatedAt: 'updated_at'
 });
 
-export default Endereco;
+export default Coluna;

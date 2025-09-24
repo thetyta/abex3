@@ -1,5 +1,6 @@
 import { sequelize } from '../config/postgres.js';
 
+// --- IMPORTAÇÃO DE TODOS OS MODELOS ---
 import Usuario from './UsuarioModel.js';
 import Endereco from './EnderecoModel.js';
 import Localidade from './LocalidadeModel.js';
@@ -10,8 +11,17 @@ import ProjetoColaborador from './ProjetoColaboradorModel.js';
 import Tarefa from './TarefaModel.js';
 import ChecklistItem from './ChecklistItemModel.js';
 import Anexo from './AnexoModel.js';
+import HistoricoConversaIA from './HistoricoConversaIAModel.js';
+import FeedbackIA from './FeedbackIAModel.js';
+// --- NOVOS MODELOS ---
+import Quadro from './QuadroModel.js';
+import Coluna from './ColunaModel.js';
+import Etiqueta from './EtiquetaModel.js';
+import TarefaEtiqueta from './TarefaEtiquetaModel.js';
+import Comentario from './ComentarioModel.js';
 
-// --- RELACIONAMENTOS ---
+
+// --- RELACIONAMENTOS ORIGINAIS ---
 Usuario.hasOne(PessoaFisica, { foreignKey: 'usuario_id', as: 'pessoa_fisica' });
 PessoaFisica.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'usuario' });
 
@@ -24,9 +34,11 @@ Endereco.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'usuario' });
 Localidade.hasMany(Endereco, { foreignKey: 'cep', as: 'enderecos' });
 Endereco.belongsTo(Localidade, { foreignKey: 'cep', as: 'localidade' });
 
+// Relacionamento de Usuário como RESPONSÁVEL pelo Projeto
 Usuario.hasMany(Projeto, { foreignKey: 'responsavel_id', as: 'projetos_responsaveis' });
 Projeto.belongsTo(Usuario, { foreignKey: 'responsavel_id', as: 'responsavel' });
 
+// Relacionamento N:N entre Usuário e Projeto (COLABORADORES)
 Usuario.belongsToMany(Projeto, {
   through: ProjetoColaborador,
   foreignKey: 'usuario_id',
@@ -42,40 +54,61 @@ Projeto.belongsToMany(Usuario, {
 
 Projeto.hasMany(Tarefa, { foreignKey: 'projeto_id', as: 'tarefas' });
 Tarefa.belongsTo(Projeto, { foreignKey: 'projeto_id', as: 'projeto' });
-
 Usuario.hasMany(Tarefa, { foreignKey: 'responsavel_id', as: 'tarefas_responsaveis' });
 Tarefa.belongsTo(Usuario, { foreignKey: 'responsavel_id', as: 'responsavel' });
-
-Tarefa.hasMany(ChecklistItem, { foreignKey: 'tarefa_id', as: 'checklist' });
+Tarefa.hasMany(ChecklistItem, { foreignKey: 'tarefa_id', as: 'checklist_itens' });
 ChecklistItem.belongsTo(Tarefa, { foreignKey: 'tarefa_id', as: 'tarefa' });
-
 Tarefa.hasMany(Anexo, { foreignKey: 'tarefa_id', as: 'anexos' });
 Anexo.belongsTo(Tarefa, { foreignKey: 'tarefa_id', as: 'tarefa' });
+Tarefa.hasMany(HistoricoConversaIA, { foreignKey: 'tarefa_id', as: 'historico_ia' });
+HistoricoConversaIA.belongsTo(Tarefa, { foreignKey: 'tarefa_id', as: 'tarefa' });
+HistoricoConversaIA.hasOne(FeedbackIA, { foreignKey: 'mensagem_id', as: 'feedback' });
+FeedbackIA.belongsTo(HistoricoConversaIA, { foreignKey: 'mensagem_id', as: 'mensagem' });
+Projeto.hasMany(Quadro, { foreignKey: 'projeto_id', as: 'quadros' });
+Quadro.belongsTo(Projeto, { foreignKey: 'projeto_id', as: 'projeto' });
+Quadro.hasMany(Coluna, { foreignKey: 'quadro_id', as: 'colunas' });
+Coluna.belongsTo(Quadro, { foreignKey: 'quadro_id', as: 'quadro' });
+Coluna.hasMany(Tarefa, { foreignKey: 'coluna_id', as: 'tarefas' });
+Tarefa.belongsTo(Coluna, { foreignKey: 'coluna_id', as: 'coluna' });
+
+// Relacionamento N:N entre Tarefa e Etiqueta
+Tarefa.belongsToMany(Etiqueta, {
+  through: TarefaEtiqueta,
+  foreignKey: 'tarefa_id',
+  otherKey: 'etiqueta_id',
+  as: 'etiquetas'
+});
+Etiqueta.belongsToMany(Tarefa, {
+  through: TarefaEtiqueta,
+  foreignKey: 'etiqueta_id',
+  otherKey: 'tarefa_id',
+  as: 'tarefas'
+});
+
+// Etiquetas pertencem a um Projeto
+Projeto.hasMany(Etiqueta, { foreignKey: 'projeto_id', as: 'etiquetas' });
+Etiqueta.belongsTo(Projeto, { foreignKey: 'projeto_id', as: 'projeto' });
+
+// Relacionamentos de Comentários
+Usuario.hasMany(Comentario, { foreignKey: 'usuario_id', as: 'comentarios' });
+Comentario.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'autor' });
+
+Tarefa.hasMany(Comentario, { foreignKey: 'tarefa_id', as: 'comentarios' });
+Comentario.belongsTo(Tarefa, { foreignKey: 'tarefa_id', as: 'tarefa' });
 
 
 // --- SINCRONIZAÇÃO COM O BANCO DE DADOS ---
 (async () => {
   try {
     // AVISO: force: true APAGA TUDO e recria as tabelas a cada reinicialização.
-    await sequelize.sync({ force: true });
+    // Use com cuidado em desenvolvimento. Nunca use em produção.
+    await sequelize.sync({ force: false }); // Mude para false para não apagar os dados
     console.log("✅ Todas as tabelas foram sincronizadas com sucesso.");
   } catch (error) {
     console.error("❌ Erro ao sincronizar as tabelas:", error);
   }
 })();
 
-
-// --- EXPORTAÇÃO DOS MODELOS ---
-
-import HistoricoConversaIA from './HistoricoConversaIAModel.js';
-import FeedbackIA from './FeedbackIAModel.js';
-
-// --- NOVOS RELACIONAMENTOS (IA) ---
-Tarefa.hasMany(HistoricoConversaIA, { foreignKey: 'tarefa_id', as: 'historico_ia' });
-HistoricoConversaIA.belongsTo(Tarefa, { foreignKey: 'tarefa_id', as: 'tarefa' });
-
-HistoricoConversaIA.hasOne(FeedbackIA, { foreignKey: 'mensagem_id', as: 'feedback' });
-FeedbackIA.belongsTo(HistoricoConversaIA, { foreignKey: 'mensagem_id', as: 'mensagem' });
 
 // --- EXPORTAÇÃO DE TODOS OS MODELOS ---
 export {
@@ -90,5 +123,10 @@ export {
   ChecklistItem,
   Anexo,
   HistoricoConversaIA,
-  FeedbackIA
+  FeedbackIA,
+  Quadro,
+  Coluna,
+  Etiqueta,
+  TarefaEtiqueta,
+  Comentario
 };

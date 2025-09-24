@@ -1,3 +1,4 @@
+// TarefaModel.js
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/postgres.js';
 
@@ -11,13 +12,11 @@ const Tarefa = sequelize.define("tarefas", {
     type: DataTypes.STRING,
     allowNull: false
   },
+  // --- ALTERADO: Utilizando ENUM para maior integridade ---
   status: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM('PENDENTE', 'EM_ANDAMENTO', 'CONCLUIDA', 'CANCELADA'),
     allowNull: false,
-    defaultValue: 'PENDENTE',
-    validate: {
-      isIn: [['PENDENTE', 'EM_ANDAMENTO', 'CONCLUIDA', 'CANCELADA']]
-    }
+    defaultValue: 'PENDENTE'
   },
   data_inicio: {
     type: DataTypes.DATEONLY,
@@ -31,17 +30,21 @@ const Tarefa = sequelize.define("tarefas", {
     type: DataTypes.DATEONLY,
     allowNull: true
   },
+  // --- ALTERADO: Utilizando ENUM para maior integridade ---
   prioridade: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM('BAIXA', 'MEDIA', 'ALTA', 'CRITICA'),
     allowNull: false,
-    defaultValue: 'MEDIA',
-    validate: {
-      isIn: [['BAIXA', 'MEDIA', 'ALTA', 'CRITICA']]
-    }
+    defaultValue: 'MEDIA'
   },
   descricao: {
     type: DataTypes.TEXT,
     allowNull: true
+  },
+  // --- ADICIONADO: Posição da tarefa na coluna (para drag-and-drop) ---
+  posicao: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0
   },
   responsavel_id: {
     type: DataTypes.INTEGER,
@@ -56,6 +59,15 @@ const Tarefa = sequelize.define("tarefas", {
     allowNull: false,
     references: {
       model: 'projetos',
+      key: 'id'
+    }
+  },
+  // --- ADICIONADO: Chave estrangeira para o modelo Coluna ---
+  coluna_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'colunas', // Referencia a nova tabela de colunas
       key: 'id'
     }
   }

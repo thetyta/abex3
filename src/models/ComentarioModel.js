@@ -1,37 +1,30 @@
+// ComentarioModel.js
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/postgres.js';
 
-const Endereco = sequelize.define("enderecos", {
+const Comentario = sequelize.define("comentarios", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  rua: {
-    type: DataTypes.STRING,
+  conteudo: {
+    type: DataTypes.TEXT,
     allowNull: false
-  },
-  rua: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  bairro: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  cep: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    references: {
-      model: 'localidades',
-      key: 'cep'
-    }
   },
   usuario_id: {
     type: DataTypes.INTEGER,
-    allowNull: true,
+    allowNull: false,
     references: {
       model: 'usuarios',
+      key: 'id'
+    }
+  },
+  tarefa_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'tarefas',
       key: 'id'
     }
   }
@@ -42,4 +35,4 @@ const Endereco = sequelize.define("enderecos", {
   updatedAt: 'updated_at'
 });
 
-export default Endereco;
+export default Comentario;
