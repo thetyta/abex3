@@ -13,7 +13,7 @@ const HistoricoConversaIA = sequelize.define("historico_conversas_ia", {
   },
   remetente: {
     type: DataTypes.ENUM('USUARIO', 'IA'),
-    allowNull: false
+    allowNull: false fasdhfasifhai
   },
   tarefa_id: {
     type: DataTypes.INTEGER,

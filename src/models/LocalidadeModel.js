@@ -4,15 +4,16 @@ import { sequelize } from '../config/postgres.js';
 const Localidade = sequelize.define("localidades", {
   cep: {
     type: DataTypes.STRING,
-    primaryKey: true
+    primaryKey: true,
+    allowNull: true
   },
   cidade: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   estado: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   }
 }, {
   freezeTableName: true,
