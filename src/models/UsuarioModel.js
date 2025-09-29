@@ -12,9 +12,13 @@ const Usuario = sequelize.define("usuarios", {
     allowNull: false,
     unique: true
   },
-  senha: {
+  senhaHash: {
+    field: 'senha_hash',
     type: DataTypes.STRING,
     allowNull: false
+  },
+  token: {
+    type: DataTypes.STRING(255)
   },
   email: {
     type: DataTypes.STRING,
@@ -24,10 +28,15 @@ const Usuario = sequelize.define("usuarios", {
       isEmail: true
     }
   },
-  codigo: {
+  codigoResetSenha: {
+    field: 'codigo_reset_senha',
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
     unique: true
+  },
+  codigoExpires: {
+    field: 'codigo_expires',
+    type: DataTypes.DATE,
   },
   nome: {
     type: DataTypes.STRING,

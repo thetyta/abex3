@@ -98,16 +98,16 @@ Comentario.belongsTo(Tarefa, { foreignKey: 'tarefa_id', as: 'tarefa' });
 
 
 // --- SINCRONIZAÇÃO COM O BANCO DE DADOS ---
-(async () => {
-  try {
-    // AVISO: force: true APAGA TUDO e recria as tabelas a cada reinicialização.
-    // Use com cuidado em desenvolvimento. Nunca use em produção.
-    await sequelize.sync({ force: false }); // Mude para false para não apagar os dados
-    console.log("✅ Todas as tabelas foram sincronizadas com sucesso.");
-  } catch (error) {
-    console.error("❌ Erro ao sincronizar as tabelas:", error);
-  }
-})();
+// (async () => {
+//   try {
+//     // AVISO: force: true APAGA TUDO e recria as tabelas a cada reinicialização.
+//     // Use com cuidado em desenvolvimento. Nunca use em produção.
+//     await sequelize.sync({ force: true }); // Mude para false para não apagar os dados
+//     console.log("✅ Todas as tabelas foram sincronizadas com sucesso.");
+//   } catch (error) {
+//     console.error("❌ Erro ao sincronizar as tabelas:", error);
+//   }
+// })();
 
 
 // --- EXPORTAÇÃO DE TODOS OS MODELOS ---

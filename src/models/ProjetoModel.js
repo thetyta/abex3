@@ -12,7 +12,7 @@ const Projeto = sequelize.define("projetos", {
     allowNull: false
   },
   tipo: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM ('PESSOAL', 'TRABALHO'),
     allowNull: false
   },
   descricao: {

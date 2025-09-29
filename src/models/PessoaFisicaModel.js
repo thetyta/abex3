@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/postgres.js';
-import Usuario from './UsuarioModel.js';
 
 const PessoaFisica = sequelize.define("pessoas_fisicas", {
   id: {

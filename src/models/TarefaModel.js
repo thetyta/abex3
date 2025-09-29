@@ -12,7 +12,6 @@ const Tarefa = sequelize.define("tarefas", {
     type: DataTypes.STRING,
     allowNull: false
   },
-  // --- ALTERADO: Utilizando ENUM para maior integridade ---
   status: {
     type: DataTypes.ENUM('PENDENTE', 'EM_ANDAMENTO', 'CONCLUIDA', 'CANCELADA'),
     allowNull: false,
@@ -30,7 +29,6 @@ const Tarefa = sequelize.define("tarefas", {
     type: DataTypes.DATEONLY,
     allowNull: true
   },
-  // --- ALTERADO: Utilizando ENUM para maior integridade ---
   prioridade: {
     type: DataTypes.ENUM('BAIXA', 'MEDIA', 'ALTA', 'CRITICA'),
     allowNull: false,
@@ -40,7 +38,6 @@ const Tarefa = sequelize.define("tarefas", {
     type: DataTypes.TEXT,
     allowNull: true
   },
-  // --- ADICIONADO: Posição da tarefa na coluna (para drag-and-drop) ---
   posicao: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -62,12 +59,11 @@ const Tarefa = sequelize.define("tarefas", {
       key: 'id'
     }
   },
-  // --- ADICIONADO: Chave estrangeira para o modelo Coluna ---
   coluna_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'colunas', // Referencia a nova tabela de colunas
+      model: 'colunas',
       key: 'id'
     }
   }

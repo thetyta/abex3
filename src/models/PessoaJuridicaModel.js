@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/postgres.js';
-import Usuario from './UsuarioModel.js';
 
 const PessoaJuridica = sequelize.define("pessoas_juridicas", {
   id: {
@@ -13,7 +12,7 @@ const PessoaJuridica = sequelize.define("pessoas_juridicas", {
     allowNull: false,
     unique: true,
     validate: {
-      len: [14, 18] // CNPJ com ou sem formatação
+      len: [14, 18]
     }
   },
   nome_fantasia: {

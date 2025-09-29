@@ -23,6 +23,7 @@ const get = async (req, res) => {
 
 const create = async (body) => {
   try {
+    // Backend will accept senhaHash directly (no hashing performed)
     const usuario = await Usuario.create(body);
     return usuario;
   } catch (error) {
@@ -35,11 +36,11 @@ const update = async (body, id) => {
     const [updatedRows] = await Usuario.update(body, {
       where: { id }
     });
-    
+
     if (updatedRows === 0) {
       throw new Error('Usuário não encontrado');
     }
-    
+
     const usuario = await Usuario.findByPk(id);
     return usuario;
   } catch (error) {
