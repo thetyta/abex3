@@ -1,6 +1,5 @@
 import { sequelize } from '../config/postgres.js';
 
-// --- IMPORTAÇÃO DE TODOS OS MODELOS ---
 import Usuario from './UsuarioModel.js';
 import Endereco from './EnderecoModel.js';
 import Localidade from './LocalidadeModel.js';
@@ -13,7 +12,6 @@ import ChecklistItem from './ChecklistItemModel.js';
 import Anexo from './AnexoModel.js';
 import HistoricoConversaIA from './HistoricoConversaIAModel.js';
 import FeedbackIA from './FeedbackIAModel.js';
-// --- NOVOS MODELOS ---
 import Quadro from './QuadroModel.js';
 import Coluna from './ColunaModel.js';
 import Etiqueta from './EtiquetaModel.js';
@@ -21,7 +19,6 @@ import TarefaEtiqueta from './TarefaEtiquetaModel.js';
 import Comentario from './ComentarioModel.js';
 
 
-// --- RELACIONAMENTOS ORIGINAIS ---
 Usuario.hasOne(PessoaFisica, { foreignKey: 'usuario_id', as: 'pessoa_fisica' });
 PessoaFisica.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'usuario' });
 

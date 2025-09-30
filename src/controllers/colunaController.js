@@ -3,6 +3,7 @@ import { Coluna, Quadro, Tarefa } from "../models/index.js"
 const get = async (req, res) => {
   try {
     const { id } = req.params
+    const { quadro_id } = req.query
     const includes = [
       { model: Quadro, as: "quadro", attributes: ["id", "nome"] },
       { model: Tarefa, as: "tarefas", attributes: ["id", "nome", "status", "posicao"] },
@@ -16,7 +17,12 @@ const get = async (req, res) => {
       return res.status(200).json(coluna)
     }
 
+    // allow filtering by quadro_id to avoid returning all columns if not necessary
+    const where = {}
+    if (quadro_id) where.quadro_id = quadro_id
+
     const colunas = await Coluna.findAll({
+      where,
       include: [{ model: Quadro, as: "quadro", attributes: ["id", "nome"] }],
       order: [["ordem", "ASC"]],
     })
