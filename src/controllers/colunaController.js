@@ -57,11 +57,16 @@ const update = async (body, id) => {
 const destroy = async (req, res) => {
   try {
     const { id } = req.params
+    
+    // Primeiro deletar todas as tarefas da coluna
+    await Tarefa.destroy({ where: { coluna_id: id } })
+    
+    // Depois deletar a coluna
     const deletedRows = await Coluna.destroy({ where: { id } })
     if (deletedRows === 0) {
       return res.status(404).json({ error: "Coluna não encontrada" })
     }
-    res.status(200).json({ message: "Coluna deletada com sucesso" })
+    res.status(200).json({ message: "Coluna e suas tarefas deletadas com sucesso" })
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
