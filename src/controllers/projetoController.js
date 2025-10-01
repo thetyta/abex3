@@ -81,4 +81,55 @@ const persist = async (req, res) => {
   }
 };
 
-export { get, create, update, destroy, persist };
+// Adicionar colaboradores a um projeto
+const addColaboradores = async (req, res) => {
+  try {
+    const { id } = req.params; // projeto_id
+    const { colaboradores } = req.body; // array de usuario_ids: [1, 2, 3]
+    
+    if (!Array.isArray(colaboradores)) {
+      return res.status(400).json({ error: 'colaboradores deve ser um array de IDs' });
+    }
+
+    const projeto = await Projeto.findByPk(id);
+    if (!projeto) {
+      return res.status(404).json({ error: 'Projeto não encontrado' });
+    }
+
+    // Importar ProjetoColaborador
+    const { ProjetoColaborador } = await import('../models/index.js');
+    
+    // Adicionar cada colaborador (ignora duplicados com upsert ou trycatch)
+    const results = [];
+    for (const usuario_id of colaboradores) {
+      try {
+        const [, created] = await ProjetoColaborador.findOrCreate({
+          where: { projeto_id: id, usuario_id },
+          defaults: { projeto_id: id, usuario_id }
+        });
+        results.push({ usuario_id, added: created });
+      } catch (err) {
+        results.push({ usuario_id, added: false, error: err.message });
+      }
+    }
+
+    // Retornar projeto atualizado com colaboradores
+    const projetoAtualizado = await Projeto.findByPk(id, {
+      include: [
+        { model: Usuario, as: 'responsavel', attributes: ['id', 'nome', 'email'] },
+        { 
+          model: Usuario, 
+          as: 'colaboradores', 
+          attributes: ['id', 'nome', 'email'],
+          through: { attributes: [] }
+        }
+      ]
+    });
+
+    res.status(200).json({ projeto: projetoAtualizado, results });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export { get, create, update, destroy, persist, addColaboradores };

@@ -6,6 +6,7 @@ const projetoRoutes = (app) => {
   app.post('/projetos', projetoController.persist);
   app.put('/projetos/:id', projetoController.persist);
   app.delete('/projetos/:id', projetoController.destroy);
+  app.post('/projetos/:id/colaboradores', projetoController.addColaboradores);
 };
 
 export default projetoRoutes;
