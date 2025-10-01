@@ -3,6 +3,7 @@ import { Quadro, Projeto, Coluna } from "../models/index.js"
 const get = async (req, res) => {
   try {
     const { id } = req.params
+    const { projeto_id } = req.query
     const includes = [
       { model: Projeto, as: "projeto", attributes: ["id", "nome"] },
       { model: Coluna, as: "colunas", attributes: ["id", "nome", "ordem"] },
@@ -16,7 +17,12 @@ const get = async (req, res) => {
       return res.status(200).json(quadro)
     }
 
+    // Filtro por projeto_id se fornecido
+    const where = {}
+    if (projeto_id) where.projeto_id = projeto_id
+
     const quadros = await Quadro.findAll({
+      where,
       include: [{ model: Projeto, as: "projeto", attributes: ["id", "nome"] }],
       order: [["created_at", "DESC"]],
     })

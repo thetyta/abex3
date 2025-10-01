@@ -73,7 +73,16 @@ const persist = async (req, res) => {
       const projeto = await update(req.body, id);
       res.status(200).json(projeto);
     } else {
+      // Criar projeto
       const projeto = await create(req.body);
+      
+      // Criar quadro automaticamente para o projeto
+      const { Quadro } = await import('../models/index.js');
+      await Quadro.create({
+        nome: 'Quadro Principal',
+        projeto_id: projeto.id
+      });
+      
       res.status(201).json(projeto);
     }
   } catch (error) {
