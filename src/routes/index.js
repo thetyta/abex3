@@ -15,6 +15,7 @@ import comentarioRoutes from './comentarioRoute.js';
 import quadroRoutes from './quadroRoute.js';
 import tarefaEtiquetaRoutes from './tarefaEtiquetaRoute.js';
 import projetoColaboradorRoutes from './projetoColaboradorRoute.js';
+import geminiRoutes from './geminiRoute.js';
 
 function Routes(app) {
   usuarioRoutes(app);
@@ -34,6 +35,7 @@ function Routes(app) {
   quadroRoutes(app);
   tarefaEtiquetaRoutes(app);
   projetoColaboradorRoutes(app);
+  geminiRoutes(app);
 }
 
 export default Routes;

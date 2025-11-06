@@ -1,5 +1,4 @@
 import { sequelize } from '../config/postgres.js';
-
 import Usuario from './UsuarioModel.js';
 import Endereco from './EnderecoModel.js';
 import Localidade from './LocalidadeModel.js';
@@ -31,11 +30,9 @@ Endereco.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'usuario' });
 Localidade.hasMany(Endereco, { foreignKey: 'cep', as: 'enderecos' });
 Endereco.belongsTo(Localidade, { foreignKey: 'cep', as: 'localidade' });
 
-// Relacionamento de Usuário como RESPONSÁVEL pelo Projeto
 Usuario.hasMany(Projeto, { foreignKey: 'responsavel_id', as: 'projetos_responsaveis' });
 Projeto.belongsTo(Usuario, { foreignKey: 'responsavel_id', as: 'responsavel' });
 
-// Relacionamento N:N entre Usuário e Projeto (COLABORADORES)
 Usuario.belongsToMany(Projeto, {
   through: ProjetoColaborador,
   foreignKey: 'usuario_id',
@@ -59,6 +56,7 @@ Tarefa.hasMany(Anexo, { foreignKey: 'tarefa_id', as: 'anexos' });
 Anexo.belongsTo(Tarefa, { foreignKey: 'tarefa_id', as: 'tarefa' });
 Tarefa.hasMany(HistoricoConversaIA, { foreignKey: 'tarefa_id', as: 'historico_ia' });
 HistoricoConversaIA.belongsTo(Tarefa, { foreignKey: 'tarefa_id', as: 'tarefa' });
+HistoricoConversaIA.belongsTo(Projeto, { foreignKey: 'projeto_id', as: 'projeto' });
 HistoricoConversaIA.hasOne(FeedbackIA, { foreignKey: 'mensagem_id', as: 'feedback' });
 FeedbackIA.belongsTo(HistoricoConversaIA, { foreignKey: 'mensagem_id', as: 'mensagem' });
 Projeto.hasMany(Quadro, { foreignKey: 'projeto_id', as: 'quadros' });
@@ -68,7 +66,6 @@ Coluna.belongsTo(Quadro, { foreignKey: 'quadro_id', as: 'quadro' });
 Coluna.hasMany(Tarefa, { foreignKey: 'coluna_id', as: 'tarefas' });
 Tarefa.belongsTo(Coluna, { foreignKey: 'coluna_id', as: 'coluna' });
 
-// Relacionamento N:N entre Tarefa e Etiqueta
 Tarefa.belongsToMany(Etiqueta, {
   through: TarefaEtiqueta,
   foreignKey: 'tarefa_id',
@@ -82,11 +79,9 @@ Etiqueta.belongsToMany(Tarefa, {
   as: 'tarefas'
 });
 
-// Etiquetas pertencem a um Projeto
 Projeto.hasMany(Etiqueta, { foreignKey: 'projeto_id', as: 'etiquetas' });
 Etiqueta.belongsTo(Projeto, { foreignKey: 'projeto_id', as: 'projeto' });
 
-// Relacionamentos de Comentários
 Usuario.hasMany(Comentario, { foreignKey: 'usuario_id', as: 'comentarios' });
 Comentario.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'autor' });
 
@@ -106,8 +101,6 @@ Comentario.belongsTo(Tarefa, { foreignKey: 'tarefa_id', as: 'tarefa' });
 //   }
 // })();
 
-
-// --- EXPORTAÇÃO DE TODOS OS MODELOS ---
 export {
   Usuario,
   Endereco,
