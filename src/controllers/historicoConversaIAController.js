@@ -1,16 +1,16 @@
-import { HistoricoConversaIA, Tarefa, FeedbackIA } from '../models/index.js';
+import { HistoricoConversaIA, Projeto, FeedbackIA } from '../models/index.js';
 
-const getHistoricoPorTarefa = async (req, res) => {
+const getHistoricoPorProjeto = async (req, res) => {
   try {
-    const { tarefa_id } = req.params;
+    const { projeto_id } = req.params;
 
-    const tarefa = await Tarefa.findByPk(tarefa_id);
-    if (!tarefa) {
-      return res.status(404).json({ error: 'Tarefa não encontrada.' });
+    const projeto = await Projeto.findByPk(projeto_id);
+    if (!projeto) {
+      return res.status(404).json({ error: 'Projeto não encontrado.' });
     }
 
     const historico = await HistoricoConversaIA.findAll({
-      where: { tarefa_id },
+      where: { projeto_id },
       include: [{
         model: FeedbackIA,
         as: 'feedback',
@@ -27,7 +27,7 @@ const getHistoricoPorTarefa = async (req, res) => {
 
 const adicionarMensagem = async (req, res) => {
   try {
-    const { tarefa_id } = req.params;
+    const { projeto_id } = req.params;
     const { conteudo, remetente } = req.body;
 
     if (!conteudo || !remetente) {
@@ -37,15 +37,15 @@ const adicionarMensagem = async (req, res) => {
       return res.status(400).json({ error: 'O campo "remetente" deve ser "USUARIO" ou "IA".' });
     }
 
-    const tarefa = await Tarefa.findByPk(tarefa_id);
-    if (!tarefa) {
-      return res.status(404).json({ error: 'Tarefa não encontrada.' });
+    const projeto = await Projeto.findByPk(projeto_id);
+    if (!projeto) {
+      return res.status(404).json({ error: 'Projeto não encontrado.' });
     }
 
     const novaMensagem = await HistoricoConversaIA.create({
       conteudo,
       remetente,
-      tarefa_id
+      projeto_id
     });
 
     res.status(201).json(novaMensagem);
@@ -54,4 +54,4 @@ const adicionarMensagem = async (req, res) => {
   }
 };
 
-export { getHistoricoPorTarefa, adicionarMensagem };
+export { getHistoricoPorProjeto, adicionarMensagem };

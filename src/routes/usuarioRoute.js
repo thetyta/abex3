@@ -6,6 +6,7 @@ const usuarioRoutes = (app) => {
   app.post('/usuarios', usuarioController.persist);
   app.put('/usuarios/:id', usuarioController.persist);
   app.delete('/usuarios/:id', usuarioController.destroy);
+  app.post('/usuarios/login', usuarioController.login);
 };
 
 export default usuarioRoutes;

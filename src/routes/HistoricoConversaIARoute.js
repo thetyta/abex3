@@ -1,8 +1,8 @@
 import * as historicoController from '../controllers/historicoConversaIAController.js';
 
 const historicoConversaIARoutes = (app) => {
-  app.get('/tarefas/:tarefa_id/historico', historicoController.getHistoricoPorTarefa);
-  app.post('/tarefas/:tarefa_id/historico', historicoController.adicionarMensagem);
+  app.get('/projetos/:projeto_id/historico', historicoController.getHistoricoPorProjeto);
+  app.post('/projetos/:projeto_id/historico', historicoController.adicionarMensagem);
 };
 
 export default historicoConversaIARoutes;

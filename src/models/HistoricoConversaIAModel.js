@@ -15,11 +15,11 @@ const HistoricoConversaIA = sequelize.define("historico_conversas_ia", {
     type: DataTypes.ENUM('USUARIO', 'IA'),
     allowNull: false
   },
-  tarefa_id: {
+  projeto_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'tarefas',
+      model: 'projetos',
       key: 'id'
     }
   }

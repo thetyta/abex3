@@ -13,16 +13,16 @@ const model = genAI.getGenerativeModel({ model: 'models/gemini-2.0-flash-lite-pr
  */
 export const generate = async (req, res) => {
     // 2. Agora você precisa receber o prompt E o ID da tarefa/conversa
-    const { prompt, tarefa_id } = req.body;
+    const { prompt, projeto_id } = req.body;
 
-    if (!prompt || !tarefa_id) {
-        return res.status(400).json({ error: 'Prompt e tarefa_id são obrigatórios' });
+    if (!prompt || !projeto_id) {
+        return res.status(400).json({ error: 'Prompt e projeto_id são obrigatórios' });
     }
 
     try {
         // 3. Carregar o histórico ANTERIOR do banco de dados
         const dbHistory = await HistoricoConversaIA.findAll({
-            where: { tarefa_id: tarefa_id },
+            where: { projeto_id },
             order: [['created_at', 'ASC']] // Garante a ordem correta
         });
 
@@ -50,14 +50,14 @@ export const generate = async (req, res) => {
         await HistoricoConversaIA.create({
             conteudo: prompt,
             remetente: 'USUARIO',
-            tarefa_id: tarefa_id
+            projeto_id
         });
         
         // Salva a resposta da IA
         await HistoricoConversaIA.create({
             conteudo: iaText,
             remetente: 'IA',
-            tarefa_id: tarefa_id
+            projeto_id
         });
 
         // 8. Enviar a resposta da IA para o frontend
