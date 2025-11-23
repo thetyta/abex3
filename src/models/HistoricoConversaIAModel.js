@@ -22,6 +22,14 @@ const HistoricoConversaIA = sequelize.define("historico_conversas_ia", {
       model: 'projetos',
       key: 'id'
     }
+  },
+  usuario_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'usuarios',
+      key: 'id'
+    }
   }
 }, {
   freezeTableName: true,

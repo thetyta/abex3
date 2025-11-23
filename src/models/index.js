@@ -56,6 +56,8 @@ Tarefa.hasMany(Anexo, { foreignKey: 'tarefa_id', as: 'anexos' });
 Anexo.belongsTo(Tarefa, { foreignKey: 'tarefa_id', as: 'tarefa' });
 Projeto.hasMany(HistoricoConversaIA, { foreignKey: 'projeto_id', as: 'historico_ia' });
 HistoricoConversaIA.belongsTo(Projeto, { foreignKey: 'projeto_id', as: 'projeto' });
+Usuario.hasMany(HistoricoConversaIA, { foreignKey: 'usuario_id', as: 'historico_ia' });
+HistoricoConversaIA.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'usuario' });
 HistoricoConversaIA.hasOne(FeedbackIA, { foreignKey: 'mensagem_id', as: 'feedback' });
 FeedbackIA.belongsTo(HistoricoConversaIA, { foreignKey: 'mensagem_id', as: 'mensagem' });
 Projeto.hasMany(Quadro, { foreignKey: 'projeto_id', as: 'quadros' });

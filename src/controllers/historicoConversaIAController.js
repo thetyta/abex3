@@ -3,14 +3,20 @@ import { HistoricoConversaIA, Projeto, FeedbackIA } from '../models/index.js';
 const getHistoricoPorProjeto = async (req, res) => {
   try {
     const { projeto_id } = req.params;
+    const { usuario_id } = req.query;
 
     const projeto = await Projeto.findByPk(projeto_id);
     if (!projeto) {
       return res.status(404).json({ error: 'Projeto não encontrado.' });
     }
 
+    const whereClause = { projeto_id };
+    if (usuario_id) {
+      whereClause.usuario_id = usuario_id;
+    }
+
     const historico = await HistoricoConversaIA.findAll({
-      where: { projeto_id },
+      where: whereClause,
       include: [{
         model: FeedbackIA,
         as: 'feedback',
@@ -28,10 +34,10 @@ const getHistoricoPorProjeto = async (req, res) => {
 const adicionarMensagem = async (req, res) => {
   try {
     const { projeto_id } = req.params;
-    const { conteudo, remetente } = req.body;
+    const { conteudo, remetente, usuario_id } = req.body;
 
-    if (!conteudo || !remetente) {
-      return res.status(400).json({ error: 'Os campos "conteudo" e "remetente" são obrigatórios.' });
+    if (!conteudo || !remetente || !usuario_id) {
+      return res.status(400).json({ error: 'Os campos "conteudo", "remetente" e "usuario_id" são obrigatórios.' });
     }
     if (!['USUARIO', 'IA'].includes(remetente)) {
       return res.status(400).json({ error: 'O campo "remetente" deve ser "USUARIO" ou "IA".' });
@@ -45,7 +51,8 @@ const adicionarMensagem = async (req, res) => {
     const novaMensagem = await HistoricoConversaIA.create({
       conteudo,
       remetente,
-      projeto_id
+      projeto_id,
+      usuario_id
     });
 
     res.status(201).json(novaMensagem);
